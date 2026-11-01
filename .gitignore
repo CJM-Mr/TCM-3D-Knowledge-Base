@@ -1,0 +1,8 @@
+node_modules/
+dist/
+build/
+__pycache__/
+*.pyc
+.server.log
+.shot_*.png
+三维知识网络.exe

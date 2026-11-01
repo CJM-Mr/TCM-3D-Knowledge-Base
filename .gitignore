@@ -3,6 +3,7 @@ dist/
 build/
 __pycache__/
 *.pyc
+*.exe
+*.orig
 .server.log
 .shot_*.png
-三维知识网络.exe

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="description" content="以中药为节点、以方剂为关联的中医药三维知识网络，支持双向查询、配伍分析与三维球状关系探索。">
+<title>本草维度 · 中药与方剂三维知识网络</title>
+  <script type="module" crossorigin src="/assets/index-BpOy0-kP.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-DHMmIL3G.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ 顶栏 ============ -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="seal">本</div>
+      <div class="brand-txt">
+        <h1>本草维度</h1>
+        <p>中药与方剂三维知识网络</p>
+      </div>
+    </div>
+
+    <button class="icon-btn only-mobile" id="btnNav" aria-label="打开导航">☰</button>
+
+    <div class="searchbox">
+      <span class="s-ico">⌕</span>
+      <input id="q" type="text" autocomplete="off" spellcheck="false"
+             placeholder="搜索中药 / 方剂 / 功效 / 归经 —— 试试「甘草」「补气」「肺经」「黄芪 当归」">
+      <kbd>/</kbd>
+      <div class="suggest" id="suggest"></div>
+    </div>
+
+    <nav class="modes" id="modes">
+      <button data-view="overview" class="on">全景</button>
+      <button data-view="herb">中药</button>
+      <button data-view="formula">方剂</button>
+      <button data-view="combo">配伍</button>
+      <button data-view="effect">功效</button>
+      <button data-view="meridian">归经</button>
+      <button data-view="compare">对比</button>
+    </nav>
+
+    <button class="icon-btn" id="btnFs" title="全屏展示">⛶</button>
+    <button class="icon-btn only-mobile" id="btnDetail" aria-label="打开详情">文</button>
+  </header>
+
+  <!-- ============ 左：知识导航 ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="side-scroll" id="sideScroll"></div>
+  </aside>
+
+  <!-- ============ 中：三维球状关系 ============ -->
+  <main class="stage" id="stage">
+    <canvas id="graph"></canvas>
+
+    <div class="hud hud-top">
+      <div class="crumbs" id="crumbs"></div>
+    </div>
+
+    <div class="stage-title" id="stageTitle"></div>
+
+    <div class="hud hud-bottom">
+      <div class="legend">
+        <span><i style="background:#4fa8ff"></i>中药</span>
+        <span><i style="background:#f0b64a"></i>方剂</span>
+        <span><i style="background:#3fd6a4"></i>功效</span>
+        <span><i style="background:#a98bfa"></i>归经</span>
+      </div>
+      <div class="tools">
+        <button data-act="zoomin" title="放大">＋</button>
+        <button data-act="zoomout" title="缩小">－</button>
+        <button data-act="reset" title="复位视角">复位</button>
+        <button data-act="labels" class="on" title="显示/隐藏标签">标签</button>
+        <button data-act="full" title="全屏">全屏</button>
+      </div>
+    </div>
+
+    <div class="hint" id="hint">拖动旋转 · 滚轮缩放 · 点击节点展开关联 · 双击深入 · 点击空白返回全景</div>
+
+    <button class="detail-reopen hidden" id="detailReopen" title="展开详情面板">‹</button>
+  </main>
+
+  <!-- ============ 右：详细知识 ============ -->
+  <aside class="detail" id="detail">
+    <div class="detail-resizer" id="detailResizer" title="拖动调整宽度 · 双击恢复默认"></div>
+    <button class="detail-back hidden" id="detailBack" title="回退到上一页（返回刚才查看的内容）" aria-label="回退">‹ 回退</button>
+    <button class="detail-close" id="detailClose" aria-label="关闭">×</button>
+    <div class="detail-scroll" id="detailScroll"></div>
+  </aside>
+
+  <!-- ============ 底部：方剂对比栏 ============ -->
+  <div class="compare-bar hidden" id="compareBar"></div>
+
+</div>
+
+<div class="boot-mask" id="bootMask">
+  <div class="boot-seal">醫</div>
+  <div class="boot-txt">正在载入知识网络…</div>
+</div>
+
+</body>
+</html>

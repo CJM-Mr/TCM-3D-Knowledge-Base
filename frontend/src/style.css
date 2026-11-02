@@ -1207,13 +1207,23 @@ body.resizing #graph { pointer-events: none; }
   color: #e4ebf5;
   text-align: justify;
 }
+.nhx-txt {
+  margin: 8px 0 0;
+  padding: 12px 14px;
+  border-left: 3px solid rgba(120, 168, 216, 0.55);
+  background: rgba(120, 168, 216, 0.06);
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  line-height: 1.95;
+  color: #dfe8f3;
+  text-align: justify;
+}
 .sec-sub {
   margin-left: 8px;
   font-size: 11px;
   font-weight: 400;
   color: var(--muted);
-  letter-spacing: 0.5px;
-}
+  letter-spacing: 0.5px;}
 .chip.lj {
   cursor: pointer;
   background: rgba(216, 184, 120, 0.12);

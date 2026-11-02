@@ -132,6 +132,10 @@
         <h3>原文条文<span class="sec-sub">《伤寒论》</span></h3>
         <blockquote class="classic-quote">${i(t.art)}</blockquote>
       </section>`:""}
+      ${t.nhx?`<section class="nhx-sec">
+        <h3>倪海厦解读<span class="sec-sub">《人纪·伤寒论》</span></h3>
+        <p class="nhx-txt">${i(t.nhx)}</p>
+      </section>`:""}
       <section>
         <h3>主治详述</h3>
         <p class="ind-detail">${i(t.indDetail||t.ind)}</p>

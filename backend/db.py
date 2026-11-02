@@ -9,7 +9,7 @@ _JSON_FORMULA = ('rel',)
 
 HERB_COLS = ('id,name,py,alias,src,part,cat,sub,nat,fla,mer,eff,tags,ind,clin,combo,dose,proc,cau,pharm,ref')
 FORMULA_COLS = ('id,name,py,src,book,lj,cat,sub,art,eff,ind,ind_detail,syn,usage,cau,ana,'
-                'feat,application,song,attach,rel,fjx,fjx_cat,fjx_sub')
+                'feat,application,song,attach,rel,fjx,fjx_cat,fjx_sub,nhx')
 
 FORMULA_FIELD_MAP = {
     'ind_detail': 'indDetail',

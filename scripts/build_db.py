@@ -71,7 +71,8 @@ CREATE TABLE formula (
   rel         TEXT DEFAULT '[]',
   fjx         INTEGER DEFAULT 0,
   fjx_cat     TEXT DEFAULT '',
-  fjx_sub     TEXT DEFAULT ''
+  fjx_sub     TEXT DEFAULT '',
+  nhx         TEXT DEFAULT ''
 );
 CREATE INDEX idx_formula_name ON formula(name);
 CREATE INDEX idx_formula_book ON formula(book);
@@ -128,12 +129,12 @@ def main():
 
     con.executemany(
         """INSERT INTO formula (id,name,py,src,book,lj,cat,sub,art,eff,ind,ind_detail,syn,
-              usage,cau,ana,feat,application,song,attach,rel,fjx,fjx_cat,fjx_sub)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+              usage,cau,ana,feat,application,song,attach,rel,fjx,fjx_cat,fjx_sub,nhx)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
         [(f['id'], f['name'], f['py'], f['src'], f['book'], f['lj'], f['cat'], f['sub'],
           f['art'], f['eff'], f['ind'], f['indDetail'], f['syn'], f['use'], f['cau'],
           f['ana'], f['feat'], f['apply'], f['song'], f['attach'], j(f['rel']),
-          f['fjx'], f['fjxCat'], f['fjxSub'])
+          f['fjx'], f['fjxCat'], f['fjxSub'], f.get('nhx', ''))
          for f in seed['formulas']]
     )
 

@@ -211,6 +211,10 @@ export function formulaHTML(f, rel) {
         <h3>原文条文<span class="sec-sub">《伤寒论》</span></h3>
         <blockquote class="classic-quote">${esc(f.art)}</blockquote>
       </section>` : ''}
+      ${f.nhx ? `<section class="nhx-sec">
+        <h3>倪海厦解读<span class="sec-sub">《人纪·伤寒论》</span></h3>
+        <p class="nhx-txt">${esc(f.nhx)}</p>
+      </section>` : ''}
       <section>
         <h3>主治详述</h3>
         <p class="ind-detail">${esc(f.indDetail || f.ind)}</p>

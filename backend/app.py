@@ -7,7 +7,9 @@ import json
 import os
 import socket
 import sys
+import tempfile
 import threading
+import time
 import webbrowser
 
 from flask import Flask, abort, jsonify, request, send_from_directory
@@ -275,6 +277,23 @@ def create_app():
     def docs_download(name):
         return send_from_directory(os.path.join(base_dir(), 'docs'), name, as_attachment=True)
 
+    # ------------------------------------------------ 页面心跳 / 关闭通知
+    @app.route('/api/ping', methods=['GET', 'POST'])
+    def ping():
+        global _HAD_CLIENT
+        cid = request.args.get('cid') or 'default'
+        with _LIFECYCLE_LOCK:
+            _CLIENTS[cid] = time.time()
+            _HAD_CLIENT = True
+        return ('', 204)
+
+    @app.route('/api/bye', methods=['GET', 'POST'])
+    def bye():
+        cid = request.args.get('cid') or 'default'
+        with _LIFECYCLE_LOCK:
+            _CLIENTS.pop(cid, None)
+        return ('', 204)
+
     # ------------------------------------------------ 前端静态资源
     @app.get('/')
     @app.get('/<path:path>')
@@ -300,6 +319,63 @@ def create_app():
     return app
 
 
+# ---------------------------------------------------------------- 实例与生命周期
+_LIFECYCLE_LOCK = threading.Lock()
+_CLIENTS = {}            # 页面 cid -> 最近心跳时间
+_HAD_CLIENT = False      # 是否已有页面连上过（避免启动阶段误退出）
+_EMPTY_SINCE = None      # 页面全部关闭的起始时间
+_MUTEX_HANDLE = None     # 单实例互斥体句柄（需保持引用）
+
+_IDLE_GRACE = 8.0        # 最后一个页面关闭后等待重连的时间（兼容刷新）
+_CLIENT_STALE = 120.0    # 页面异常退出时，心跳超时后清理（需大于后台标签节流间隔）
+
+
+def _state_file():
+    """记录当前实例端口，供重复启动时打开已有页面。"""
+    return os.path.join(tempfile.gettempdir(), 'tcm3d_knowledge_network.port')
+
+
+def acquire_single_instance(no_browser):
+    """Windows 命名互斥体：已有实例时打开其页面并退出，避免重复启动多个服务。"""
+    global _MUTEX_HANDLE
+    if os.name != 'nt':
+        return
+    import ctypes
+    k32 = ctypes.windll.kernel32
+    k32.CreateMutexW.restype = ctypes.c_void_p
+    k32.CreateMutexW.argtypes = [ctypes.c_void_p, ctypes.c_bool, ctypes.c_wchar_p]
+    _MUTEX_HANDLE = k32.CreateMutexW(None, False, 'Local\\TCM3D_KnowledgeNetwork')
+    if k32.GetLastError() == 183:            # ERROR_ALREADY_EXISTS
+        if not no_browser:
+            try:
+                with open(_state_file(), 'r', encoding='utf-8') as f:
+                    p = int(f.read().strip())
+                webbrowser.open('http://127.0.0.1:%d' % p)
+            except Exception:                # noqa: BLE001
+                pass
+        os._exit(0)
+
+
+def _watchdog():
+    """浏览器页面全部关闭后自动退出；尚未有页面连上时不会误杀。"""
+    global _EMPTY_SINCE
+    while True:
+        time.sleep(1.5)
+        now = time.time()
+        with _LIFECYCLE_LOCK:
+            for cid in [c for c, t in _CLIENTS.items() if now - t > _CLIENT_STALE]:
+                _CLIENTS.pop(cid, None)
+            if _CLIENTS:
+                _EMPTY_SINCE = None
+                continue
+            if not _HAD_CLIENT:
+                continue
+            if _EMPTY_SINCE is None:
+                _EMPTY_SINCE = now
+            elif now - _EMPTY_SINCE >= _IDLE_GRACE:
+                os._exit(0)
+
+
 # ---------------------------------------------------------------- 启动
 def free_port(start=DEFAULT_PORT, tries=30):
     for p in range(start, start + tries):
@@ -322,7 +398,13 @@ def main():
             port = int(argv[i + 1])
         if a == '--db' and i + 1 < len(argv):
             os.environ['TCM_DB'] = argv[i + 1]
+    acquire_single_instance(no_browser)
     port = free_port(port)
+    try:
+        with open(_state_file(), 'w', encoding='utf-8') as f:
+            f.write(str(port))
+    except Exception:                        # noqa: BLE001
+        pass
 
     path = db_path()
     if not os.path.isfile(path):
@@ -348,6 +430,8 @@ def main():
     print('  访问地址：%s' % url)
     print('  关闭本窗口即退出服务')
     print('=' * 52)
+
+    threading.Thread(target=_watchdog, daemon=True).start()
 
     if not no_browser:
         threading.Timer(1.0, lambda: webbrowser.open(url)).start()

@@ -183,33 +183,7 @@ book_meta     (id, data)                                              -- 典籍/
 
 ---
 
-## 六、重新构建
-
-```bash
-# 1. 只改前端
-cd frontend && npm run build
-
-# 2. 重新生成数据库（改了 data/raw 里的原始数据后）
-node scripts/export_seed.js
-python scripts/build_db.py
-
-# 3. 换图标（改了 assets/icon-source.png 后）
-python scripts/make_icon.py
-
-# 4. 一键出 exe（自动构建前端 + 校验图标 + 校验数据库）
-python scripts/build_exe.py
-
-# 5. 后端自测
-python scripts/test_api.py
-```
-
-> 重新打包前需先**关闭正在运行的 exe**，否则文件被占用会报 `PermissionError`。
-> `build_exe.py` 会把 `dist/三维知识网络.exe` 复制回项目根目录。
-> 数据库可用环境变量覆盖输入位置：`set TCM_DB=F:\x\tcm.db`。
-
----
-
-## 七、功能一览
+## 六、功能一览
 
 - **三维知识网络**：球面布局 585 个节点，拖动旋转、滚轮缩放、双击深入、点击空白回全景
 - **双向查询**：中药 → 含该药的方剂；方剂 → 组成药味 → 各药的其他方剂
@@ -225,7 +199,7 @@ python scripts/test_api.py
 
 ---
 
-## 八、数据来源
+## 七、数据来源
 
 - `docs/中药.docx` — 270 味中药的性味归经、功效主治、配伍、药理
 - `docs/方剂学.pdf` — 全国中医药行业高等教育「十三五」规划教材《方剂学》（第十版），

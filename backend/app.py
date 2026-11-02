@@ -20,6 +20,15 @@ import search as searchmod
 APP_NAME = '三维知识网络'
 DEFAULT_PORT = 8765
 
+# PyInstaller --noconsole 打包后 stdout/stderr/stdin 可能为 None，
+# 直接 print/input 会抛异常，这里统一兜底到 devnull。
+if sys.stdout is None:
+    sys.stdout = open(os.devnull, 'w', encoding='utf-8')
+if sys.stderr is None:
+    sys.stderr = open(os.devnull, 'w', encoding='utf-8')
+if sys.stdin is None:
+    sys.stdin = open(os.devnull, 'r', encoding='utf-8')
+
 # 数据库默认随程序放在 data/ 下，可用 --db 或环境变量 TCM_DB 覆盖
 
 

@@ -44,6 +44,7 @@ def main():
     args = [
         sys.executable, '-m', 'PyInstaller',
         '--noconfirm', '--clean', '--onefile',
+        '--noconsole',
         '--name', NAME,
         '--icon', ICON,
         '--distpath', os.path.join(ROOT, 'dist'),

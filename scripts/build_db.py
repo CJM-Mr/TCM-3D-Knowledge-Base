@@ -140,7 +140,7 @@ def main():
     rows = []
     for f in seed['formulas']:
         for i, c in enumerate(f['comp']):
-            rows.append((f['id'], c['h'], c['d'], c['r'], c['n'], i))
+            rows.append((f['id'], c['h'], c['d'], c.get('r', ''), c.get('n', ''), i))
     con.executemany(
         'INSERT OR REPLACE INTO formula_herb (formula_id,herb_id,dose,role,note,ord) VALUES (?,?,?,?,?,?)',
         rows

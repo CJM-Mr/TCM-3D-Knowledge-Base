@@ -189,8 +189,10 @@ export function formulaHTML(f, rel) {
   const key = 'f:' + f.id;
   const fav = isFav(key);
   const comp = f.comp || [];
+  // 有君臣佐使标注才显示相关徽标/标签，没有则不显示
+  const hasRoles = comp.some((c) => (c.r || '').trim());
 
-  const tabs = [['ov', '概览'], ['ind', '主治'], ['comp', '组成 ' + comp.length], ['ana', '君臣佐使'], ['rel', '相关方剂']]
+  const tabs = [['ov', '概览'], ['ind', '主治'], ['comp', '组成 ' + comp.length], ['ana', hasRoles ? '君臣佐使' : '配伍分析'], ['rel', '相关方剂']]
     .map(([k, n]) => `<button class="tab ${tab === k ? 'on' : ''}" data-tab="formula:${k}">${n}</button>`).join('');
 
   let body = '';
@@ -303,7 +305,7 @@ export function formulaHTML(f, rel) {
       '佐': '辅助治疗、制约药性，或减轻毒副作用',
       '使': '引经报使，或调和诸药'
     };
-    body = `
+    const roleSections = hasRoles ? `
       <div class="jc-intro">${f.fjx ? '君臣佐使据教材方解文字归纳标注，可结合下方「配伍分析」理解。' : '君臣佐使属方剂配伍分析，依据教材标注，不按药物排列顺序自动判定。'}</div>
       ${roles.map((r) => {
         const list = comp.filter((c) => (c.r || '').indexOf(r) >= 0);
@@ -318,7 +320,9 @@ export function formulaHTML(f, rel) {
             </div>`;
           }).join('')}
         </section>`;
-      }).join('')}
+      }).join('')}` : '';
+    body = `
+      ${roleSections}
       <section>
         <h3>配伍分析</h3>
         <p class="ana">${esc(f.ana)}</p>

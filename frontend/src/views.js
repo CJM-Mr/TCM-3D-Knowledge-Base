@@ -286,7 +286,7 @@ export function formulaHTML(f, rel) {
         const hb = store.herb(c.h);
         if (!hb) return '';
         return `<div class="comp-item" data-herb="${hb.id}">
-          <div class="ci-role role-${esc(c.r)}">${esc(c.r)}</div>
+          ${c.r ? `<div class="ci-role role-${esc(c.r)}">${esc(c.r)}</div>` : ''}
           <div class="ci-main">
             <div class="ci-name">${esc(hb.name)}<span class="ci-dose">${esc(c.d)}</span></div>
             <div class="ci-eff">${esc((hb.eff || []).join(' · '))}</div>

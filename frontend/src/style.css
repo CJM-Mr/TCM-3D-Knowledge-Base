@@ -696,11 +696,14 @@ section { margin-bottom: 4px; }
   font-size: 12px;
   font-family: var(--serif);
   border: 1px solid currentColor;
+  color: #6d7889;
+  background: rgba(255, 255, 255, 0.045);
 }
 .role-君 { color: #e06a52; background: rgba(224, 106, 82, 0.1); }
 .role-臣 { color: #e0b45e; background: rgba(224, 180, 94, 0.1); }
 .role-佐 { color: #5aa9e8; background: rgba(90, 169, 232, 0.1); }
 .role-使 { color: #6fbf8f; background: rgba(111, 191, 143, 0.1); }
+.role-佐使 { color: #7fc0b0; background: rgba(111, 191, 143, 0.08); }
 .ci-main { flex: 1; min-width: 0; }
 .ci-name { font-size: 14px; color: #f0e4cc; font-family: var(--serif); letter-spacing: 1px; }
 .ci-dose { font-size: 10.5px; color: #6d7889; margin-left: 8px; font-family: var(--sans); letter-spacing: 0; }

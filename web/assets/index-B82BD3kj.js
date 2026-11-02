@@ -194,7 +194,7 @@
       </section>`:""}`}else if(a==="comp")u=`
       <div class="hint-line">点击任意药物，查看其性味、归经、功效、药理与配伍禁忌</div>
       ${o.map(f=>{const r=d.herb(f.h);return r?`<div class="comp-item" data-herb="${r.id}">
-          <div class="ci-role role-${i(f.r)}">${i(f.r)}</div>
+          ${f.r?`<div class="ci-role role-${i(f.r)}">${i(f.r)}</div>`:""}
           <div class="ci-main">
             <div class="ci-name">${i(r.name)}<span class="ci-dose">${i(f.d)}</span></div>
             <div class="ci-eff">${i((r.eff||[]).join(" · "))}</div>
